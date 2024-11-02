@@ -2,7 +2,7 @@
 #原作者@Semporia
 #原项目地址:https://github.com/Semporia/Clash
 #修改时间：2024-11-2
-#增加手动选择节点
+#更新了一些广告规则
 #==========================================
 
 # 本地端 HTTP(S) 代理服务器端口
@@ -130,14 +130,13 @@ ipcidr: &a7 {type: http, behavior: ipcidr, interval: 28800}
 proxy-providers:
   Subscribe:
     <<: *a1
-    url: 机场订阅  #订阅链接
+    url: 订阅链接  #订阅链接
     path: ./proxy_providers/Airport.yaml
     
-proxies: null
 proxy-groups:
 
   - {name: ♻️ Auto, <<: *a4}
-  - {name: 手动切换, <<: *a2}
+  - {name: 手动节点, <<: *a2}
   - {name: HK, <<: *a4, filter: "香港|HK|(?i)Hong"}
   - {name: JP, <<: *a4, filter: "日本|东京|JP|(?i)Japan"}   
   - {name: TW, <<: *a4, filter: "台湾|TW|(?i)Taiwan"}
@@ -171,9 +170,9 @@ proxy-groups:
   - {name: WeChat, type: select, proxies: [JP, HK, TW, US, SG, TH, AE, TR, DIRECT, 手动节点, ♻️ Auto], icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/WeChat.png }
   - {name: PayPal, type: select, proxies: [US, HK, JP, TW, SG, TH, AE, TR, DIRECT, 手动节点, ♻️ Auto], icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Social_Media/Paypal.png }
   - {name: Zoom, type: select, proxies: [DIRECT, HK, JP, TW, US, SG, TH, AE, TR, 手动节点, ♻️ Auto], icon: https://raw.githubusercontent.com/Semporia/Hand-Painted-icon/master/Universal/Zoom.png }
+  - {name: Proxy, type: select, proxies: [DIRECT, HK, JP, TW, US, SG, TH, AE, TR, 手动节点, ♻️ Auto]}
   - {name: ChinaIP, type: select, proxies: [DIRECT, HK, JP, TW, US, SG, TH, AE, TR, 手动节点, ♻️ Auto]}
-  - {name: 🌏 Global, <<: *a3}
-  - {name: MATCH, <<: *a3}
+  - {name: MATCH, type: select, proxies: [DIRECT, HK, JP, TW, US, SG, TH, AE, TR, 手动节点, ♻️ Auto]}
 
 rule-providers:
   AdBlock: {<<: *a6, url: https://whatshub.top/rule/AntiAD.rule, path: ./ruleset/AdBlock.yaml}
@@ -230,9 +229,9 @@ rules:
   - RULE-SET,WeChat,WeChat
   - RULE-SET,PayPal,PayPal
   - RULE-SET,Zoom,Zoom
-  - RULE-SET,China,DIRECT
-  - RULE-SET,ChinaIP,DIRECT
-  - RULE-SET,Proxy,🌏 Global
+  - RULE-SET,China,China
+  - RULE-SET,ChinaIP,ChinaIP
+  - RULE-SET,Proxy,Proxy
 
  # Local Area Network
   - IP-CIDR,192.168.0.0/16,DIRECT
@@ -244,8 +243,9 @@ rules:
   - IP-CIDR,8.218.42.178/32,DIRECT
   - IP-CIDR,119.28.28.28/32,DIRECT
   - IP-CIDR,182.254.116.0/24,DIRECT
+  - MATCH,MATCH
 
   # （可选）使用来自 ipipdotnet 的 ChinaIP 以解决数据不准确的问题，使用 ChinaIP.yaml 时可禁用下列直至（包括）「GEOIP,CN」规则
 
-  - GEOIP,CN,DIRECT
-  - MATCH,MATCH
+ # - GEOIP,CN,DIRECT
+
