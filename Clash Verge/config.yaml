@@ -7,122 +7,111 @@
 # @ConfigVersion     1.6.5
 #==========================================
 
-# Port of HTTP(S) proxy server on the local end
+# 本地端 HTTP(S) 代理服务器端口
 port: 7890
- 
-# Port of SOCKS5 proxy server on the local end
+
+# 本地端 SOCKS5 代理服务器端口
 socks-port: 7891
- 
-# Transparent proxy server port for Linux and macOS
+
+# Linux 和 macOS 的透明代理服务器端口
 # redir-port: 7892
- 
-# HTTP(S) and SOCKS5 server on the same port
+
+# 在同一个端口上启用 HTTP(S) 和 SOCKS5 服务器
 mixed-port: 7890
- 
-# authentication of local SOCKS5/HTTP(S) server
+
+# 本地 SOCKS5/HTTP(S) 服务器的身份验证
 # authentication:
 #  - "user1:pass1"
 #  - "user2:pass2"
- 
-# Set to true to allow connections to local-end server from
-# other LAN IP addresses
+
+# 设置为 true 允许来自其他局域网 IP 地址的连接到本地端服务器
 allow-lan: false
- 
-# This is only applicable when `allow-lan` is `true`
-# '*': bind all IP addresses
-# 192.168.122.11: bind a single IPv4 address
-# "[aaaa::a8aa:ff:fe09:57d8]": bind a single IPv6 address
+
+# 当 `allow-lan` 设置为 `true` 时才生效
+# '*': 绑定所有 IP 地址
+# 192.168.122.11: 绑定单个 IPv4 地址
+# "[aaaa::a8aa:ff:fe09:57d8]": 绑定单个 IPv6 地址
 bind-address: '*'
- 
-# Clash router working mode
-# rule: rule-based packet routing
-# global: all packets will be forwarded to a single endpoint
-# direct: directly forward the packets to the Internet
+
+# Clash 路由器工作模式
+# rule: 基于规则的包路由
+# global: 所有数据包将被转发到单个端点
+# direct: 直接将数据包转发到互联网
 mode: Rule
- 
-# Clash by default prints logs to STDOUT
+
+# Clash 默认将日志打印到 STDOUT
 # info / warning / error / debug / silent
 log-level: info
- 
-# When set to false, resolver won't translate hostnames to IPv6 addresses
+
+# 当设置为 false 时，解析器将不会将主机名转换为 IPv6 地址
 ipv6: true
- 
-# RESTful web API listening address
+
+# RESTful 网络 API 监听地址
 external-controller: 127.0.0.1:59446
- 
-# A relative path to the configuration directory or an absolute path to a
-# directory in which you put some static web resource. Clash core will then
-# serve it at `${API}/ui`.
+
+# 配置目录的相对路径或包含一些静态网络资源的目录的绝对路径。Clash 核心将在
+# `${API}/ui` 中提供服务。
 # external-ui: folder
- 
-# Secret for the RESTful API (optional)
-# Authenticate by spedifying HTTP header `Authorization: Bearer ${secret}`
-# ALWAYS set a secret if RESTful API is listening on 0.0.0.0
+
+# RESTful API 的密钥（可选）
+# 通过指定 HTTP 头 `Authorization: Bearer ${secret}` 来进行身份验证
+# 如果 RESTful API 监听 0.0.0.0，请始终设置密钥
 # secret: 357e4d16-90c4-4afe-bb32-2e7b30e051f8
- 
-# Outbound interface name
+
+# 出站接口名称
 # interface-name: en0
- 
-# Static hosts for DNS server and connection establishment, only works
-# when `dns.enhanced-mode` is `redir-host`.
+
+# 用于 DNS 服务器和连接建立的静态主机，仅在 `dns.enhanced-mode` 为 `redir-host` 时有效。
 #
-# Wildcard hostnames are supported (e.g. *.clash.dev, *.foo.*.example.com)
-# Non-wildcard domain names has a higher priority than wildcard domain names
-# e.g. foo.example.com > *.example.com > .example.com
-# P.S. +.foo.com equals to .foo.com and foo.com
+# 支持通配符主机名（例如 *.clash.dev，*.foo.*.example.com）
+# 非通配符域名比通配符域名优先级更高
+# 例如 foo.example.com > *.example.com > .example.com
+# 补充：+.foo.com 等于 .foo.com 和 foo.com
 hosts:
   'mtalk.google.com': 108.177.125.188
   # '*.clash.dev': 127.0.0.1
   # '.dev': 127.0.0.1
   # 'alpha.clash.dev': '::1'
- 
-# DNS server settings
-# This section is optional. When not present, DNS server will be disabled.
+
+# DNS 服务器设置
+# 此部分可选。如果不存在，DNS 服务器将被禁用。
 dns:
   enable: false
   listen: 0.0.0.0:53
-  # ipv6: false # when false, response to AAAA questions will be empty
- 
-  # These nameservers are used to resolve the DNS nameserver hostnames below.
-  # Specify IP addresses only
+  # ipv6: false # 当为 false 时，对 AAAA 查询的响应将为空
+  
+  # 这些名称服务器用于解析下面的 DNS 服务器主机名。
+  # 仅指定 IP 地址
   default-nameserver:
     - 223.5.5.5
     - 119.29.29.29
-  enhanced-mode: fake-ip # redir-host or fake-ip
-  fake-ip-range: 198.18.0.1/16 # Fake IP addresses pool CIDR
+  enhanced-mode: fake-ip # redir-host 或 fake-ip
+  fake-ip-range: 198.18.0.1/16 # 假 IP 地址池 CIDR
   
-  # Hostnames in this list will not be resolved with fake IPs
-  # i.e. questions to these domain names will always be answered with their
-  # real IP addresses
+  # 此列表中的主机名不会使用假 IP 解析
+  # 即对这些域名名的查询将始终使用它们的真实 IP 地址进行响应
   # fake-ip-filter:
   #   - '*.lan'
   #   - localhost.ptlogin2.qq.com
   
-  # Supports UDP, TCP, DoT, DoH. You can specify the port to connect to.
-  # All DNS questions are sent directly to the nameserver, without proxies
-  # involved. Clash answers the DNS question with the first result gathered.
+  # 支持 UDP、TCP、DoT、DoH。您可以指定要连接的端口。
+  # 所有 DNS 查询直接发送到名称服务器，而无需代理参与。Clash 使用收集到的第一个结果来回答 DNS 查询。
   nameserver:
     - https://doh.pub/dns-query
     - https://dns.alidns.com/dns-query
  
-  # When `fallback` is present, the DNS server will send concurrent requests
-  # to the servers in this section along with servers in `nameservers`.
-  # The answers from fallback servers are used when the GEOIP country
-  # is not `CN`.
+  # 当 `fallback` 存在时，DNS 服务器将向此部分中的服务器以及 `nameservers` 中的服务器发送并发请求。
+  # 当 GEOIP 国家/地区不是 `CN` 时，使用来自后备服务器的响应。
   # fallback:
   #   - tcp://1.1.1.1
  
-  # If IP addresses resolved with servers in `nameservers` are in the specified
-  # subnets below, they are considered invalid and results from `fallback`
-  # servers are used instead.
+  # 如果使用 `nameservers` 中的服务器解析的 IP 地址在下面的指定子网中，则认为它们无效，并使用来自 `fallback` 服务器的结果。
   #
-  # IP address resolved with servers in `nameserver` is used when
-  # `fallback-filter.geoip` is true and when GEOIP of the IP address is `CN`.
+  # 当 `fallback-filter.geoip` 为 true 且 IP 地址的 GEOIP 为 `CN` 时，使用使用 `nameserver` 中的服务器解析的 IP 地址。
   #
-  # If `fallback-filter.geoip` is false, results from `fallback` nameservers
-  # are always used, and answers from `nameservers` are discarded.
+  # 如果 `fallback-filter.geoip` 为 false，则始终使用来自 `fallback` 名称服务器的结果，并丢弃来自 `nameservers` 的响应。
   #
-  # This is a countermeasure against DNS pollution attacks.
+  # 这是针对 DNS 污染攻击的反制措施。
   fallback-filter:
     geoip: true
     geoip-code: CN
